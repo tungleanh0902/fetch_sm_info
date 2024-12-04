@@ -1,25 +1,13 @@
 var express = require('express')
 var router = express.Router()
-var { broadcast } = require('./../controller/transaction')
-const SlashingMonitor = require('../subscription/slashing')
+const { ethers } = require("ethers");
+const Ape = require('../../contract/Ape.json');
 
-router.use(function timeLog(req, res, next) {
-  req.txRequest = req.body && req.body.payload
-  if (req.txRequest) {
-    console.log(`Transaction ${Date.now()} ${req.txRequest.messageType}`)
-  } else {
-    res.json({ error: 'No Request Found' })
-  }
-  next()
-})
-
-router.use('/broadcast', async function (req, res) {
-  const response = await broadcast(
-    req.txRequest,
-    req.headers.fingerprint || false,
-    req.headers.development === 'true'
-  )
-  res.json(response)
+router.use('/kyleapitest', async function (req, res) {
+  const provider = new ethers.JsonRpcProvider("https://eth.llamarpc.com");
+  const contract = new ethers.Contract("0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D", Ape.abi, provider);
+  let apePrice = await contract.apePrice()
+  return res.json({apePrice: apePrice.toString()})
 })
 
 module.exports = router

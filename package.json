@@ -28,5 +28,8 @@
   },
   "resolutions": {
     "node-addon-api": "^2.0.1"
+  },
+  "dependencies": {
+    "signale": "^1.4.0"
   }
 }
